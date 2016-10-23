@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
 });
 
 app.listen(process.env.PORT || 3000, function(){
-    console.log('listening on', app.address().port);
+    console.log('listening on', 3000);
 });
 
 function get_num() {
