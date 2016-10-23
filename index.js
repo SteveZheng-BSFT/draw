@@ -15,6 +15,7 @@ app.get('/', function (req, res) {
     res.redirect('/draw.html');
 });
 
+//must write process.env.PORT otherwise can't deploy on heroku
 app.listen(process.env.PORT || 3000, function(){
     console.log('listening on', 3000);
 });
