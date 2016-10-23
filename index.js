@@ -15,7 +15,9 @@ app.get('/', function (req, res) {
     res.redirect('/draw.html');
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000, function(){
+    console.log('listening on', app.address().port);
+});
 
 function get_num() {
     return getRandomIntInclusive(1, 7);
