@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
     res.redirect('/draw.html');
 });
 
-app.listen(80);
+app.listen(3000);
 
 function get_num() {
     return getRandomIntInclusive(1, 7);
