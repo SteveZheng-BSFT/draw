@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>抽签</title>
+</head>
+<body>
+
+<form action="/draw" method="post">
+    <input name="uname" type="text" placeholder="输入名字" required>
+    <input type="submit" value='开始抽签'>
+</form>
+<div id="show_msg"></div>
+
+<script>
+    if (window.location.search == '?name_err') {
+        document.getElementById('show_msg').innerHTML = '请输入姓名';
+    }
+</script>
+</body>
+</html>
