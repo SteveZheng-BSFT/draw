@@ -86,6 +86,7 @@
         <option value="$PROJECT_DIR$/stat.txt" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -238,12 +239,12 @@
       <workItem from="1477192927638" duration="345000" />
       <workItem from="1477193368167" duration="10244000" />
       <workItem from="1477248351505" duration="1359000" />
-      <workItem from="1477250841073" duration="94000" />
+      <workItem from="1477250841073" duration="583000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15702000" />
+    <option name="totallyTimeSpent" value="16191000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="594" y="23" width="1042" height="729" extended-state="0" />
@@ -455,6 +456,14 @@
           <folding>
             <element signature="e#0#38#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>

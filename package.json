@@ -15,7 +15,8 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": "4.4.7"
+    "node": "4.4.7",
+    "npm": "3.10.7"
   },
   "config": {
     "port": "3000"
