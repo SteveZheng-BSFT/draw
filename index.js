@@ -1,6 +1,7 @@
 /**
  * Created by ZZS on 10/22/16.
  */
+'use strict'
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -20,16 +21,58 @@ app.listen(process.env.PORT || 3000, function(){
     console.log('listening on', 3000);
 });
 
-function get_num() {
-    return getRandomIntInclusive(1, 7);
-}
-
-//draw num from [min, max]
-function getRandomIntInclusive(min, max) {
+//draw num from [min, max)
+function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
 }
+
+function get_num() {
+    var p = new Promise(function (resolve, reject) {
+        var defaultArr = [1,2,3,4,5,6,7];
+        var remainLength = 7;
+        fs.open(statFile, 'r', function (err, fd1) {
+            if(err){
+                throw err;
+            }else {
+                fs.stat(statFile, function (err, stats) {
+                    var buffer = new Buffer(stats.size+1);//if buffer is 0, read will err
+                    // console.log('length'+buffer.length)
+                    fs.read(fd1, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+                        var data = buffer.toString("utf8", 0, buffer.length);
+                        var existNums = data.match(/\d/g);
+                        if (existNums == null) {
+                            return getRandomInt(0, remainLength+1);
+                        }
+                        // console.log('e'+existNums)
+                        for(let i=0; i<existNums.length; i++){
+                            defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
+                        }
+                        // console.log('d'+defaultArr)
+                        var newArr = defaultArr.filter(function (value) {
+                            return value > -1;
+                        });
+                        remainLength = newArr.length;
+                        console.log(newArr)
+                        console.log(getRandomInt(0, remainLength))
+                        // console.log('n'+newArr)
+                        fs.close(fd1);
+
+                        resolve(newArr[getRandomInt(0, remainLength)]);
+
+                    });
+                })
+            }
+
+        });
+    })
+    
+    return p;
+
+}
+
+
 
 var statFile = 'stat.txt';
 app.post('/draw', function (req, res) {
@@ -38,12 +81,16 @@ app.post('/draw', function (req, res) {
     if(uname == null || uname == '' ) {
         return res.redirect('/draw.html?name_err');
     }
-    var num = get_num();
+    
+    
+    
 
     //save in file system
     var arr;
 
     fs.open(statFile, 'a+', function (err, fd) {
+        var defaultArr = [1,2,3,4,5,6,7];
+        var remainLength = 7;
         if(err){
             throw err;
         }else {
@@ -57,9 +104,33 @@ app.post('/draw', function (req, res) {
                         return value.search(uname) > -1;
                     });
                     if(qualifiedArr.length == 0){
+
+                        var existNums = data.match(/\d/g);
+                        if (existNums == null) {
+                            return getRandomInt(0, remainLength+1);
+                        }
+                        // console.log('e'+existNums)
+                        for(let i=0; i<existNums.length; i++){
+                            defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
+                        }
+                        // console.log('d'+defaultArr)
+                        var newArr = defaultArr.filter(function (value) {
+                            return value > -1;
+                        });
+                        remainLength = newArr.length;
+                        console.log(newArr)
+                        console.log(getRandomInt(0, remainLength))
+                        // console.log('n'+newArr)
+                        
+
+                        var num = newArr[getRandomInt(0, remainLength)];
+
                         var written = uname+':'+num+';';
                         fs.write(fd, written);
                         res.json(uname + '的号码为:' + num);
+                        console.log(num);
+                        
+                        
                     }else{
                         res.json('您已经抽签 - ' + qualifiedArr);
                     }
