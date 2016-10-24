@@ -16,6 +16,38 @@ app.get('/', function (req, res) {
     res.redirect('/draw.html');
 });
 
+app.get('/all',function (req, res) {
+    fs.open(statFile, 'r', function (err, fd1) {
+        if(err){
+            throw err;
+        }else {
+            fs.stat(statFile, function (err, stats) {
+                var buffer = new Buffer(stats.size+1);//if buffer is 0, read will err
+                // console.log('length'+buffer.length)
+                fs.read(fd1, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+                    var data = buffer.toString("utf8", 0, buffer.length);
+                    res.json(data);
+                    // console.log('n'+newArr)
+                    fs.close(fd1);
+                });
+            })
+        }
+
+    });
+});
+
+app.get('/del', function (req, res) {
+    fs.open(statFile, 'w', function (err, fd1) {
+        if(err){
+            throw err;
+        }else {
+            fs.write(fd1, '*');
+            fs.close(fd1);
+            res.redirect('/guanli.html?del_done');
+        }
+    });
+});
+
 //must write process.env.PORT otherwise can't deploy on heroku
 app.listen(process.env.PORT || 3000, function(){
     console.log('listening on', 3000);
@@ -28,62 +60,14 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function get_num() {
-    var p = new Promise(function (resolve, reject) {
-        var defaultArr = [1,2,3,4,5,6,7];
-        var remainLength = 7;
-        fs.open(statFile, 'r', function (err, fd1) {
-            if(err){
-                throw err;
-            }else {
-                fs.stat(statFile, function (err, stats) {
-                    var buffer = new Buffer(stats.size+1);//if buffer is 0, read will err
-                    // console.log('length'+buffer.length)
-                    fs.read(fd1, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-                        var data = buffer.toString("utf8", 0, buffer.length);
-                        var existNums = data.match(/\d/g);
-                        if (existNums == null) {
-                            return getRandomInt(0, remainLength+1);
-                        }
-                        // console.log('e'+existNums)
-                        for(let i=0; i<existNums.length; i++){
-                            defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
-                        }
-                        // console.log('d'+defaultArr)
-                        var newArr = defaultArr.filter(function (value) {
-                            return value > -1;
-                        });
-                        remainLength = newArr.length;
-                        console.log(newArr)
-                        console.log(getRandomInt(0, remainLength))
-                        // console.log('n'+newArr)
-                        fs.close(fd1);
-
-                        resolve(newArr[getRandomInt(0, remainLength)]);
-
-                    });
-                })
-            }
-
-        });
-    })
-    
-    return p;
-
-}
-
-
 
 var statFile = 'stat.txt';
-app.post('/draw', function (req, res) {
+app.post('/kaishi', function (req, res) {
     var uname = req.body.uname;
     // console.log(uname);
     if(uname == null || uname == '' ) {
         return res.redirect('/draw.html?name_err');
     }
-    
-    
-    
 
     //save in file system
     var arr;
@@ -99,6 +83,7 @@ app.post('/draw', function (req, res) {
                 // console.log('length'+buffer.length)
                 fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
                     var data = buffer.toString("utf8", 0, buffer.length);
+
                     arr = data.split(';').slice(0, -1);
                     var qualifiedArr = arr.filter(function (value) {
                         return value.search(uname) > -1;
