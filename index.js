@@ -47,10 +47,7 @@ app.get('/del', function (req, res) {
     });
 });
 
-//must write process.env.PORT otherwise can't deploy on heroku
-app.listen(process.env.PORT || 3000, function(){
-    console.log('listening on', 3000);
-});
+
 
 //draw num from [min, max)
 function getRandomInt(min, max) {
@@ -129,4 +126,9 @@ app.post('/kaishi', function (req, res) {
 
     //send result
     // return res.json(uname + '的号码为:' + num);
+});
+
+//must write process.env.PORT otherwise can't deploy on heroku
+app.listen(process.env.PORT || 3000, function(){
+    console.log('listening on', 3000);
 });
