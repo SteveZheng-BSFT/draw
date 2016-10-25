@@ -1,7 +1,6 @@
 /**
  * Created by ZZS on 10/22/16.
  */
-'use strict'
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -41,7 +40,7 @@ app.get('/del', function (req, res) {
         if(err){
             throw err;
         }else {
-            fs.write(fd1, '*');
+            fs.write(fd1, '');
             fs.close(fd1);
             res.redirect('/guanli.html?del_done');
         }
@@ -91,24 +90,24 @@ app.post('/kaishi', function (req, res) {
                     if(qualifiedArr.length == 0){
 
                         var existNums = data.match(/\d/g);
+                        var num;
                         if (existNums == null) {
-                            return getRandomInt(0, remainLength+1);
-                        }
-                        // console.log('e'+existNums)
-                        for(let i=0; i<existNums.length; i++){
-                            defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
-                        }
-                        // console.log('d'+defaultArr)
-                        var newArr = defaultArr.filter(function (value) {
-                            return value > -1;
-                        });
-                        remainLength = newArr.length;
-                        console.log(newArr)
-                        console.log(getRandomInt(0, remainLength))
-                        // console.log('n'+newArr)
-                        
+                            num = getRandomInt(1, remainLength+1);
+                        }else{
+                            for(let i=0; i<existNums.length; i++){
+                                defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
+                            }
+                            // console.log('d'+defaultArr)
+                            var newArr = defaultArr.filter(function (value) {
+                                return value > -1;
+                            });
+                            remainLength = newArr.length;
+                            console.log(newArr)
+                            console.log(getRandomInt(0, remainLength))
 
-                        var num = newArr[getRandomInt(0, remainLength)];
+                            num = newArr[getRandomInt(0, remainLength)];
+                        }
+
 
                         var written = uname+':'+num+';';
                         fs.write(fd, written);
