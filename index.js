@@ -91,7 +91,7 @@ app.post('/kaishi', function (req, res) {
                         if (existNums == null) {
                             num = getRandomInt(1, remainLength+1);
                         }else{
-                            for(let i=0; i<existNums.length; i++){
+                            for(var i=0; i<existNums.length; i++){
                                 defaultArr[defaultArr.indexOf(parseInt(existNums[i]))] = -1;
                             }
                             // console.log('d'+defaultArr)
