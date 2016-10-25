@@ -99,8 +99,8 @@ app.post('/kaishi', function (req, res) {
                                 return value > -1;
                             });
                             remainLength = newArr.length;
-                            console.log(newArr)
-                            console.log(getRandomInt(0, remainLength))
+                            // console.log(newArr)
+                            // console.log(getRandomInt(0, remainLength))
 
                             num = newArr[getRandomInt(0, remainLength)];
                         }
@@ -109,8 +109,7 @@ app.post('/kaishi', function (req, res) {
                         var written = uname+':'+num+';';
                         fs.write(fd, written);
                         res.json(uname + '的号码为:' + num);
-                        console.log(num);
-                        
+                        // console.log(num);
                         
                     }else{
                         res.json('您已经抽签 - ' + qualifiedArr);
